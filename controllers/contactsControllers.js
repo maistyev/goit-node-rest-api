@@ -1,37 +1,37 @@
-import contactsService from "../services/contactsServices.js";
-import { HttpError } from "../helpers/HttpError.js";
+import * as contactsService from "../services/contactsServices.js";
+import HttpError from "../helpers/HttpError.js";
 
-export const getAllContacts = (req, res) => {
-    const contacts = contactsService.listContacts();
+export const getAllContacts = async (req, res) => {
+    const contacts = await contactsService.listContacts();
     res.json(contacts);
 };
 
-export const getOneContact = (req, res) => {
+export const getOneContact = async (req, res) => {
     const {id} = req.params;
-    const contact = contactsService.getContactById(id);
+    const contact = await contactsService.getContactById(id);
     if (!contact) {
         throw HttpError(404);
     }
     res.json(contact);
 };
 
-export const deleteContact = (req, res) => {
+export const deleteContact = async (req, res) => {
     const {id} = req.params;
-    const removedContact = contactsService.removeContact(id);
+    const removedContact = await contactsService.removeContact(id);
     if (!removedContact) {
         throw HttpError(404);
     }
     res.json(removedContact);
 };
 
-export const createContact = (req, res) => {
-    const contact = contactsService.addContact(req.body);
+export const createContact = async (req, res) => {
+    const contact = await contactsService.addContact(req.body);
     res.status(201).json(contact);
 };
 
-export const updateContact = (req, res) => {
+export const updateContact = async (req, res) => {
     const {id} = req.params;
-    const updatedContact = contactsService.updateContact(id, req.body);
+    const updatedContact = await contactsService.updateContact(id, req.body);
     if (!updatedContact) {
         throw HttpError(404);
     }
