@@ -32,5 +32,8 @@ export const updateContactSchema = Joi.object({
     "phone": Joi.string().messages({
         "string.base": `"phone" should be a type of 'text'`,
         "string.empty": `"phone" cannot be an empty field`,
+    }),
+    "favorite": Joi.boolean().messages({
+        "boolean.base": `"favorite" should be a type of 'boolean'`,
     })
 })
