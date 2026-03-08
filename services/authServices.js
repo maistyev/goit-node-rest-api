@@ -1,4 +1,7 @@
 import bcrypt from "bcrypt";
+import gravatar from "gravatar";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 
 import User from "../db/models/User.js";
 
@@ -12,7 +15,9 @@ export const registerUser = async (payload) => {
     const user = await findUser({ email: payload.email });
     if (user) throw HttpError(409, "Email in use");
     const hashPassword = await bcrypt.hash(payload.password, 10);
-    return User.create({ ...payload, password: hashPassword });
+    const avatarURL = gravatar.url(payload.email, { s: '200', r: 'pg', d: '404' });
+
+    return User.create({ ...payload, password: hashPassword, avatarURL });
 };
 
 export const loginUser = async ({ email, password }) => {
@@ -32,4 +37,12 @@ export const loginUser = async ({ email, password }) => {
 
 export const logoutUser = user => {
     return user.update({ token: null });
+}
+
+export const updateAvatar = async (userId, file) => {
+    const newPath = path.resolve("public", "avatars", file.filename);
+    await fs.rename(file.path, newPath);
+    const avatarURL = path.join("avatars", file.filename);
+    User.update({ avatarURL }, { where: { id: userId } });
+    return avatarURL;
 }

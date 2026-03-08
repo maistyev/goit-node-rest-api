@@ -25,3 +25,10 @@ export const logoutController = async(req, res)=> {
   await authServices.logoutUser(req.user);
   res.status(204).send();
 }
+
+export const updateAvatarController = async(req, res) => {
+    const {id: userId} = req.user;
+    const result = await authServices.updateAvatar(userId, req.file);
+    console.log(result);
+    res.json(result);
+}
