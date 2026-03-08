@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 
 import sequelize from "../sequelize.js";
+import { verify } from "node:crypto";
 
 const User = sequelize.define(
     "user",
@@ -25,9 +26,16 @@ const User = sequelize.define(
         },
         avatarURL: {
             type: DataTypes.STRING,
+        },
+        verified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        verificationToken: {
+            type: DataTypes.STRING,
         }
     }
 );
-User.sync({ alter: true });
+User.sync({ force: true });
 
 export default User;

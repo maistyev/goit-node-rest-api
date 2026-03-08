@@ -5,7 +5,9 @@ import {
   loginController,
   logoutController,
   getCurrentController,
-  updateAvatarController
+  updateAvatarController,
+  verifyController,
+  resendVerifyController
 } from "../controllers/authControllers.js";
 
 import validateBody from "../helpers/validateBody.js";
@@ -22,9 +24,12 @@ authRouter.post(
   registerController
 );
 
+authRouter.get("/verify/:verificationToken", verifyController);
+authRouter.post("/verify/resend", validateBody(emailSchema), resendVerifyController);
+
 authRouter.post("/login", validateBody(authLoginSchema), loginController);
 authRouter.get("/current", authenticate, getCurrentController);
-authRouter.post("/logout", authenticate, logoutController);
 authRouter.patch("/avatars", authenticate, upload.single("avatar"), updateAvatarController);
+authRouter.post("/logout", authenticate, logoutController);
 
 export default authRouter;

@@ -8,6 +8,20 @@ export const registerController = async (req, res) => {
   });
 };
 
+export const verifyController = async(req, res)=> {
+  const {verificationToken} = req.params;
+  await authServices.verifyUser(verificationToken);
+  res.json({
+    message: "Verification successful"
+  })
+}
+
+export const resendVerifyController = async(req, res)=> {
+  await authServices.resendVerify(req.body);
+  res.json({
+    message: "Verification email sent"
+  })
+}
 export const loginController = async(req, res)=> {
   const result = await authServices.loginUser(req.body);
   res.json(result)
